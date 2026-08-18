@@ -13,6 +13,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { connectDB } from "./lib/db.js";
 import fs from "fs";
 import path from "path";
+import { job } from "./lib/job.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
