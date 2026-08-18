@@ -45,7 +45,11 @@ app.use("/api/messages", messageRoutes);
 if (fs.existsSync(publicDir)) {
   app.use(express.static(publicDir));
 
+<<<<<<< HEAD
   app.get("/{*splat}", (req, res, next) => {
+=======
+  app.get("*", (req, res, next) => {
+>>>>>>> fcfa235a38f64df91324d695d96fba9c9303d6e0
     res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
   });
 }
