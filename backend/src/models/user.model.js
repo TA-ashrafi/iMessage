@@ -6,22 +6,31 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      index: true,
     },
+
     email: {
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
+
     fullName: {
       type: String,
       required: true,
+      trim: true,
     },
+
     profilePic: {
       type: String,
       default: "",
     },
   },
-  { timestamps: true }, // createdAt & updatedAt
+  {
+    timestamps: true,
+  }
 );
 
 const User = mongoose.model("User", userSchema);
