@@ -16,10 +16,10 @@ import path from "path";
 import { job } from "./lib/job.js";
 
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 const publicDir = path.join(process.cwd(), "public");
-
 
 app.use(
     cors({
@@ -40,9 +40,10 @@ app.get("/health", (req, res) => {
 
 if (fs.existsSync(publicDir)) {
     app.use(express.static(publicDir));
+
     app.get("/{*any}", (req, res) => {
-        res.sendFile(path.join(publicDir, "index.html") , (err) => next(err));  
-    })
+        res.sendFile(path.join(publicDir, "index.html"));
+    });
 }
 
 const startServer = async () => {
@@ -51,7 +52,11 @@ const startServer = async () => {
 
         app.listen(PORT, () => {
             console.log(`Server is UP and running on PORT: ${PORT}`);
-            if (process.env.NODE_ENV === "production") job.start();
+
+            if (process.env.NODE_ENV === "production") {
+                job.start();
+                console.log("Cron job started");
+            }
         });
     } catch (error) {
         console.error("Failed to start server:", error.message);
