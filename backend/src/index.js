@@ -13,7 +13,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { connectDB } from "./lib/db.js";
 import fs from "fs";
 import path from "path";
-import { job } from "./lib/job.js";
+import job from "./cron.js";
 
 const app = express();
 
