@@ -9,10 +9,10 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { clerkMiddleware } from "@clerk/express";
-
-import { connectDB } from "./lib/db.js";
 import fs from "fs";
 import path from "path";
+
+import { connectDB } from "./lib/db.js";
 import job from "./cron.js";
 
 const app = express();
@@ -30,13 +30,16 @@ app.use(
 
 app.use(express.json());
 
-app.use(clerkMiddleware());
-
+// HEALTH CHECK — Clerk se pehle
 app.get("/health", (req, res) => {
+    console.log("Health endpoint called");
+
     res.status(200).json({
         ok: true,
     });
 });
+
+app.use(clerkMiddleware());
 
 if (fs.existsSync(publicDir)) {
     app.use(express.static(publicDir));
