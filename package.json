@@ -1,0 +1,11 @@
+{
+  "name": "chat-app-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:frontend": "npm --prefix frontend install --legacy-peer-deps && npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend install && npm --prefix backend run build",
+    "build": "npm run build:frontend && npm run build:backend && node -e \"const fs=require('fs'); fs.rmSync('public',{recursive:true,force:true}); fs.rmSync('backend/public',{recursive:true,force:true}); fs.cpSync('frontend/dist','public',{recursive:true}); fs.cpSync('frontend/dist','backend/public',{recursive:true})\"",
+    "start": "node backend/src/index.js"
+  }
+}
