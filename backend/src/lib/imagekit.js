@@ -1,9 +1,14 @@
 import ImageKit, { toFile } from "@imagekit/nodejs";
 
-const imagekit = new ImageKit({ privateKey: process.env.IMAGEKIT_PRIVATE_KEY });
-
 function hasImageKitConfig() {
   return Boolean(process.env.IMAGEKIT_PRIVATE_KEY);
+}
+
+function getImageKitInstance() {
+  if (!process.env.IMAGEKIT_PRIVATE_KEY) {
+    throw new Error("IMAGEKIT_PRIVATE_KEY is missing");
+  }
+  return new ImageKit({ privateKey: process.env.IMAGEKIT_PRIVATE_KEY });
 }
 
 // originalName= "My Photo (1).png"
@@ -20,6 +25,7 @@ function createFileName(originalName = "upload") {
  */
 async function uploadChatMedia(file) {
   const fileName = createFileName(file.originalname);
+  const imagekit = getImageKitInstance();
 
   const result = await imagekit.files.upload({
     file: await toFile(file.buffer, fileName, { type: file.mimetype }),
