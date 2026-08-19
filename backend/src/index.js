@@ -1,3 +1,4 @@
+import dns from "dns";
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
@@ -14,6 +15,14 @@ import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 
 import { app, server } from "./lib/socket.js";
+
+dns.setServers([
+  "1.1.1.1",
+  "8.8.8.8",
+]);
+
+
+
 
 const PORT = process.env.PORT || 3001;
 

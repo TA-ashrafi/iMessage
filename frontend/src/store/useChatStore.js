@@ -84,17 +84,38 @@ export const useChatStore = create(
         if (!userId) return;
 
         const socket = useAuthStore.getState().socket;
-        if (!socket) return;
 
-        socket.off("newMessage");
-        socket.on("newMessage", (newMessage) => {
-          // if im not the receiver don't do anything just return
-          if (String(newMessage.senderId) !== String(userId)) return;
+        if (!socket) {
+          console.warn("Cannot subscribe: socket is not connected");
+          return;
+        }
 
-          set({ messages: [...get().messages, newMessage] });
+        const handleNewMessage = (newMessage) => {
+          console.log("New realtime message received:", newMessage);
+
+          // Only accept messages coming from the currently selected user
+          if (String(newMessage.senderId) !== String(userId)) {
+            return;
+          }
+
+          set((state) => ({
+            messages: [...state.messages, newMessage],
+          }));
 
           get().getConversations();
-        });
+        };
+
+        socket.off("newMessage", handleNewMessage);
+
+        socket.on("newMessage", handleNewMessage);
+      },
+
+      unsubscribeFromMessages: () => {
+        const socket = useAuthStore.getState().socket;
+
+        if (socket) {
+          socket.off("newMessage");
+        }
       },
 
       unsubscribeFromMessages: () => {
